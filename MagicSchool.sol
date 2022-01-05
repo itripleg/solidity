@@ -27,9 +27,9 @@ contract MagicSchool is ERC1155, Ownable, ERC1155Receiver, VRFConsumerBase {
   // vars for chainlink randomness
   uint256 private chainlinkFee = 0.001 * 10 ** 18; // 0.1 LINK (Polygon Mumbai)
   bytes32 private keyHash = 0x6e75b569a01ef56d18cab6a8e71e6600d6ce853834d4a5748b720d06f878b3a4; //Polygon keyHash
-  address VRFCoordinator = 0x8C7382F9D8f56b33781fE506E897a4F1e2d17255; // Polygon testnet VRF
-  address linkAddress = 0x326C977E6efc84E512bB9C30f76E30c160eD06FB;  //Polygon testnet LINK
-  bytes32 internal requestId; //used to return randomness with an address
+  address VRFCoordinator = 0x8C7382F9D8f56b33781fE506E897a4F1e2d17255; // Polygon testnet VRF address
+  address linkAddress = 0x326C977E6efc84E512bB9C30f76E30c160eD06FB;  //Polygon testnet LINK address
+  bytes32 internal requestId; //used to return randomness for  later
   
   // Enrollment vars
   mapping (bytes32 => address) addressWaitingToBeSorted;
