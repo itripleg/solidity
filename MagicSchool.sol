@@ -40,7 +40,7 @@ contract MagicSchool is ERC1155, Ownable, ERC1155Receiver, VRFConsumerBase {
   mapping(address => string) public signByAddress;
   
   // ERC-1155 Tokens
-  uint256 public constant HOUSEPOINTS = 0;
+  uint256 public constant HOUSEPOINTS = 0; // 0 is the ID of our HOUSEPOINTS token, we'll mint them later
 
   /**
   @notice constructor()
@@ -49,9 +49,8 @@ contract MagicSchool is ERC1155, Ownable, ERC1155Receiver, VRFConsumerBase {
   constructor() ERC1155("") VRFConsumerBase(VRFCoordinator, linkAddress) 
   {
       headmaster = payable(msg.sender);
-      _mint(address(this), HOUSEPOINTS, 10**6, "");
+      _mint(address(this), HOUSEPOINTS, 10**6, ""); // we mint one million HOUSEPOINTS here to give to this contract
   }
-  
   
   function setURI(string memory newuri) public onlyOwner {
       _setURI(newuri);
@@ -65,7 +64,7 @@ contract MagicSchool is ERC1155, Ownable, ERC1155Receiver, VRFConsumerBase {
             require (enrolledStudents[i] != msg.sender, "Already enrolled");     
           }
         require( msg.value == enrollmentCost, "Enrollment cost not met");
-        // Enrollment process. Is this safe???
+        // Enrollment process
         enrolledStudents.push(msg.sender);
         setApprovalForAll(address(this), true);
         safeTransferFrom(address(this), msg.sender, 0 , 1000 , ""); //send new student some HousePoints
