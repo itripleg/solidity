@@ -52,15 +52,16 @@ contract MagicSchool is ERC1155, Ownable, ERC1155Receiver, VRFConsumerBase {
       headmaster = payable(msg.sender);
       _mint(address(this), HOUSEPOINTS, 10**6, "");
   }
-
-    function setURI(string memory newuri) public onlyOwner {
-        _setURI(newuri);
-    }
+  
+  
+  function setURI(string memory newuri) public onlyOwner {
+      _setURI(newuri);
+  }
 
   ///@dev initial enroll with a payable cost to join
   function enroll() public payable {    
       require(msg.sender != headmaster, "Headmaster cannot enroll!");
-      require(enrolledStudents.length < 10, "students at max capcity!");
+      require(enrolledStudents.length < 10, "Students at max capcity!");
         for (uint256 i; i < enrolledStudents.length; i++){
             require (enrolledStudents[i] != msg.sender, "Already enrolled");     
           }
@@ -68,7 +69,7 @@ contract MagicSchool is ERC1155, Ownable, ERC1155Receiver, VRFConsumerBase {
         // Enrollment process
         enrolledStudents.push(msg.sender);
         setApprovalForAll(address(this), true);
-        safeTransferFrom(address(this), msg.sender, 0 , 1000 , ""); //receive HousePoints
+        safeTransferFrom(address(this), msg.sender, 0 , 1000 , ""); //send new student some HousePoints
         setApprovalForAll(address(this), false);
   }
 
@@ -78,8 +79,8 @@ contract MagicSchool is ERC1155, Ownable, ERC1155Receiver, VRFConsumerBase {
   }
 
   /** 
-    @notice sorting function charges a fee in house points and makes a chainlink requestRandomness
-            call and maps the caller to a requestId to be sorted randomly 
+    @notice sorting function charges a fee in house points and makes a Chainlink requestRandomness
+    call and maps the caller to a requestId to be sorted later 
   */
   function sort() public returns (bytes32){
     require(sortingResults[msg.sender] == 0, "Already sorted!");
