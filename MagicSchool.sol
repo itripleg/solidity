@@ -65,7 +65,7 @@ contract MagicSchool is ERC1155, Ownable, ERC1155Receiver, VRFConsumerBase {
             require (enrolledStudents[i] != msg.sender, "Already enrolled");     
           }
         require( msg.value == enrollmentCost, "Enrollment cost not met");
-        // Enrollment process
+        // Enrollment process. Is this safe???
         enrolledStudents.push(msg.sender);
         setApprovalForAll(address(this), true);
         safeTransferFrom(address(this), msg.sender, 0 , 1000 , ""); //send new student some HousePoints
