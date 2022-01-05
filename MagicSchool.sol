@@ -1,10 +1,10 @@
 pragma solidity >=0.8.0 <0.9.0;
-//SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: MIT
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC1155/utils/ERC1155Receiver.sol";
 import "@chainlink/contracts/src/v0.8/VRFConsumerBase.sol";
-import "hardhat/console.sol";
+// import "hardhat/console.sol"; // for use with eth-scaffold
 
 //Not yet implemented
 struct wizard {
@@ -20,27 +20,26 @@ struct wizard {
 */
 contract MagicSchool is ERC1155, Ownable, ERC1155Receiver, VRFConsumerBase {
 
-  ///@notice Headmaster can set a vanity motto visble to entire school
+  // Headmaster can set a vanity motto visble to entire school
   address payable public headmaster;
   string public motto = "WAGMI";
 
-  /// Vars for chainlink randomness
+  // vars for chainlink randomness
   uint256 private chainlinkFee = 0.001 * 10 ** 18; // 0.1 LINK (Polygon Mumbai)
   bytes32 private keyHash = 0x6e75b569a01ef56d18cab6a8e71e6600d6ce853834d4a5748b720d06f878b3a4; //Polygon keyHash
   address VRFCoordinator = 0x8C7382F9D8f56b33781fE506E897a4F1e2d17255; // Polygon testnet VRF
   address linkAddress = 0x326C977E6efc84E512bB9C30f76E30c160eD06FB;  //Polygon testnet LINK
-  bytes32 internal requestId;
-
-  /// Enrollment vars
+  bytes32 internal requestId; //used to return randomness with an address
+  
+  // Enrollment vars
   mapping (bytes32 => address) addressWaitingToBeSorted;
   mapping(address => uint) public sortingResults; 
   uint256 enrollmentCost = 1 wei;
   address[] public enrolledStudents;
   string[] signs = ["", "EARTH", "WIND", "FIRE", "WATER"]; //null zero index
   mapping(address => string) public signByAddress;
-
   
-  /// ERC-1155 Tokens
+  // ERC-1155 Tokens
   uint256 public constant HOUSEPOINTS = 0;
 
   /**
@@ -58,7 +57,7 @@ contract MagicSchool is ERC1155, Ownable, ERC1155Receiver, VRFConsumerBase {
       _setURI(newuri);
   }
 
-  ///@dev initial enroll with a payable cost to join
+  // initial enroll with a payable cost to join
   function enroll() public payable {    
       require(msg.sender != headmaster, "Headmaster cannot enroll!");
       require(enrolledStudents.length < 10, "Students at max capcity!");
@@ -73,13 +72,13 @@ contract MagicSchool is ERC1155, Ownable, ERC1155Receiver, VRFConsumerBase {
         setApprovalForAll(address(this), false);
   }
 
-  /// returns an address array of address that have paid the enrollment fee
+  // returns an address array of address that have paid the enrollment fee
   function getEnrolledStudents() public view returns (address[] memory){
     return enrolledStudents;
   }
 
   /** 
-    @notice sorting function charges a fee in house points and makes a Chainlink requestRandomness
+    sort function charges a fee in HousePoints and makes a Chainlink requestRandomness
     call and maps the caller to a requestId to be sorted later 
   */
   function sort() public returns (bytes32){
@@ -91,7 +90,7 @@ contract MagicSchool is ERC1155, Ownable, ERC1155Receiver, VRFConsumerBase {
     return(requestId);
   }
 
-  ///This function is only called by the ChainlinkVRF once randomness has been generated
+  // This function is only called by the ChainlinkVRF once randomness has been generated
   function fulfillRandomness(bytes32, uint256 randomness) internal override {
       uint256 sortvalue = randomness % 5 + 1;
       sortingResults[addressWaitingToBeSorted[requestId]] = sortvalue;
@@ -100,7 +99,6 @@ contract MagicSchool is ERC1155, Ownable, ERC1155Receiver, VRFConsumerBase {
   /** 
     Vanity motto to display for fun. Will add more flexiblity later.
   */
-
   function setMotto(string memory newMotto) public {
       require (msg.sender == headmaster, "Only Headmaster can set motto.");
       motto = newMotto;
@@ -113,11 +111,9 @@ contract MagicSchool is ERC1155, Ownable, ERC1155Receiver, VRFConsumerBase {
     needed for succesful compilation. Need to clean this up
     but we'll be lazy for now
   */
-
   function supportsInterface(bytes4 interfaceId) public view virtual override(ERC1155, ERC1155Receiver) returns (bool) {
     return super.supportsInterface(interfaceId);
   }
-
   function onERC1155Received(
       address,
       address,
@@ -127,7 +123,6 @@ contract MagicSchool is ERC1155, Ownable, ERC1155Receiver, VRFConsumerBase {
   ) public virtual override returns (bytes4) {
       return this.onERC1155Received.selector;
   }
-
   function onERC1155BatchReceived(
       address,
       address,
