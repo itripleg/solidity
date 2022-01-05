@@ -71,7 +71,7 @@ contract MagicSchool is ERC1155, Ownable, ERC1155Receiver, VRFConsumerBase {
         setApprovalForAll(address(this), false);
   }
 
-  // returns an address array of address that have paid the enrollment fee
+  // returns an array of address that have paid the enrollment fee
   function getEnrolledStudents() public view returns (address[] memory){
     return enrolledStudents;
   }
