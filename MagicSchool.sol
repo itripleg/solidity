@@ -56,7 +56,7 @@ contract MagicSchool is ERC1155, Ownable, ERC1155Receiver, VRFConsumerBase {
       _setURI(newuri);
   }
 
-  // initial enroll with a payable cost to join
+  // enroll after paying the fee to join
   function enroll() public payable {    
       require(msg.sender != headmaster, "Headmaster cannot enroll!");
       require(enrolledStudents.length < 10, "Students at max capcity!");
