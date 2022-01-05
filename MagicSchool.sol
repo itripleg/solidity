@@ -97,7 +97,7 @@ contract MagicSchool is ERC1155, Ownable, ERC1155Receiver, VRFConsumerBase {
   }
 
   /** 
-    Vanity motto to display for fun I want this motto 
+    Vanity motto to display for fun. Will add more flexiblity later.
   */
 
   function setMotto(string memory newMotto) public {
