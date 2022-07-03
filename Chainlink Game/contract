@@ -1,4 +1,0 @@
-const Web3 = require('web3')
-web3 = new Web3('https://speedy-nodes-nyc.moralis.io/a89a5e99c977f7e095a47958/eth/kovan')
-abi = require('./erc20abi')
-contract = new web3.eth.Contract(abi, '0xa36085F69e2889c224210F603D836748e7dC0088')
